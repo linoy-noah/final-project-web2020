@@ -12,7 +12,7 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
   {% load static %}
-  <link rel="stylesheet"  href="{% static 'style.css' %}">
+  <link rel="stylesheet" href="{% static 'style.css' %}">
 </head>
 
 <body>
@@ -41,12 +41,15 @@
     <li><a href="/">Home &nbsp;&nbsp;/</a></li>
     <li class="active"><a href="/">Order delivery</a></li>
     {% if user.is_authenticated %}
-    <li class="logout"><form action="{% url 'logoutuser' %}" method="POST">
-      {% csrf_token %}
-      <button type="submit" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-log-out"></span> Logout</button>
-    </form> </li>
+    <li class="logout">
+      <form action="{% url 'logoutuser' %}" method="POST">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-log-out"></span>
+          Logout</button>
+      </form>
+    </li>
     <li class="login"> Hello {{user.username}}<div class="ellipse"></div>
-     
+
     </li>
     {% endif %}
   </ul>
@@ -58,11 +61,11 @@
           <h1>New Delivery</h1><br>
           <h3 class="errMsg">{{errMsg}}</h3>
           {% csrf_token %}
-        
-            {{ form.as_p }} 
-  
 
-            
+          {{ form.as_p }}
+
+
+
           <input type="submit" class="btn btn-primary" name="submit" value="submit">
         </form>
       </div>

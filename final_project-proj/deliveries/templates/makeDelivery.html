@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>first_HandIn</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+</head>
+
+<body id="makeDelivery">
+    <nav class="navbar navbar-inverse">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" id="logo" href="/"><span>JustSa</span></a>
+            </div>
+            <div class="collapse navbar-collapse" id="myNavbar">
+                <ul class="nav navbar-nav">
+                    <li><a href="/">Home</a></li>
+                    <li><a href="/order/">Order delivery</a></li>
+                    <li><a href="/myDeliveries/">My deliveries</a></li>
+                    <li class="select"><a href="/makeDelivery/">Make a delivery</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <ul class="breadcrumb text-center">
+        <li><a href="/">Home &nbsp;&nbsp;/</a></li>
+        <li class="active"><a href="/makeDelivery/">Make a delivery</a></li>
+        {% if user.is_authenticated %}
+        <li class="logout"><form action="{% url 'logoutuser' %}" method="POST">
+          {% csrf_token %}
+          <button type="submit" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-log-out"></span> Logout</button>
+        </form> </li>
+        <li class="login"> Hello {{user.username}}<div class="ellipse"></div>
+         
+        </li>
+        {% endif %}
+        </li>
+    </ul>
+
+    <main>
+        <div class="container text-center ">
+            <div class="row content">
+                <h1>Make a delivery</h1>
+                <div class="form-group">
+                    <h3>Filter by type:</h3>
+                    <select class="form-control" id="sel2" name="area" required>
+                        <option value="all">Show all</option>
+                        <option value="mail">Mail</option>
+                        <option value="food">Food</option>
+                        <option value="flowers">Flowers</option>
+                        <option value="gift">Gift</option>
+                        <option value="mysteryBox">Mystery Box</option>
+                    </select>
+                </div>
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Delivery name</th>
+                            <th>Delivery Area</th>
+                            <th>Size</th>
+                            <th>Comments</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for d in deliveries %}
+                        <tr id="{{d.id}}" class="{{d.delType}}">
+                            <td><span class="type"></span>
+                                <p>{{d.title}}</p>
+                            </td>
+                            <td>
+                                {%if d.area == "GD"%}<p>Gush dan</p>{% endif %}
+                                {%if d.area == "RH"%}<p>Ramat hagolan</p>{% endif %}
+                                {%if d.area == "HS"%}<p>Hashfela</p>{% endif %}
+                                {%if d.area == "DR"%}<p>Darom</p>{% endif %}
+                                {%if d.area == "GL"%}<p>Galil</p>{% endif %} </td>
+                            <td>
+                                <p>
+                                    {% if d.size == 0 %}S{% endif %}
+                                    {% if d.size == 1 %}M{% endif %}
+                                    {% if d.size == 2 %}L{% endif %}
+                                </p>
+                            </td>
+                            <td>
+                                {% if d.description is  None %}
+                                {% else %}
+                                <p>{{d.description}}</p>
+                                {% endif %}
+                            </td>
+                            <td>
+                                <form action="{% url 'updatestat' d.id %}" method="post">
+                                    {% csrf_token %}
+                                    {{form.as_p}}
+
+                                        {% if d.status == 1 %}<button type="sumbit" class="btn btn-primary">I'm on my way!</button>{% endif %}
+                                        {% if d.status == 2 %}<button type="sumbit" class="btn btn-success">Delivery has arrieved</button>{% endif %}
+                                  </form>
+                                  {% if d.status == 3 %}<div  class="o3"></div>{% endif %}
+                                  
+                            </td>
+                        </tr>
+                        {% endfor %}
+                        {% for d in newdeliveries %}
+                        <tr id="{{d.id}}" class="{{d.delType}}">
+                            <td><span class="type"></span>
+                                <p>{{d.title}}</p>
+                            </td>
+                            <td>
+                                {%if d.area == "GD"%}<p>Gush dan</p>{% endif %}
+                                {%if d.area == "RH"%}<p>Ramat hagolan</p>{% endif %}
+                                {%if d.area == "HS"%}<p>Hashfela</p>{% endif %}
+                                {%if d.area == "DR"%}<p>Darom</p>{% endif %}
+                                {%if d.area == "GL"%}<p>Galil</p>{% endif %} </td>
+                            <td>
+                                <p>
+                                    {% if d.size == 0 %}S{% endif %}
+                                    {% if d.size == 1 %}M{% endif %}
+                                    {% if d.size == 2 %}L{% endif %}
+                                </p>
+                            </td>
+                            <td>
+                                {% if d.description is  None %}
+                                {% else %}
+                                <p>{{d.description}}</p>
+                                {% endif %}
+                            </td>
+                            <td>
+                                <form action="{% url 'updatestat' d.id %}" method="post">
+                                    {% csrf_token %}
+                                    {{form.as_p}}
+                                    <button type="sumbit" class="btn btn-default">I will take it!</button>
+                                  </form>
+                               
+                            </td>
+                        </tr>
+                        {% endfor %}
+                        
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+    </main>
+    {% load static %}
+    <script src="{% static 'script2.js' %}" async></script>
+    {% load static %}
+    <script src="{% static 'script.js' %}" async></script>
+
+</body>
+
+</html>

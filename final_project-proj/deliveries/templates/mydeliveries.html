@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>first_HandIn</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css"
+    integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay" crossorigin="anonymous">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+  {% load static %}
+  <link rel="stylesheet"  href="{% static 'style.css' %}">
+</head>
+
+<body>
+  <nav class="navbar navbar-inverse">
+    <div class="container-fluid">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" id="logo" href="/"><span>JustSa</span></a>
+      </div>
+      <div class="collapse navbar-collapse" id="myNavbar">
+        <ul class="nav navbar-nav">
+          <li><a href="/">Home</a></li>
+          <li><a href="/order/">Order delivery</a></li>
+          <li class="select"><a href="/myDeliveries/">My deliveries</a></li>
+          <li><a href="/makeDelivery/">Make a delivery</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <ul class="breadcrumb text-center">
+    <li><a href="/">Home &nbsp;&nbsp;/</a></li>
+    <li class="active"><a href="/myDeliveries/">My deliveries</a></li>
+    {% if user.is_authenticated %}
+    <li class="logout"><form action="{% url 'logoutuser' %}" method="POST">
+      {% csrf_token %}
+      <button type="submit" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-log-out"></span> Logout</button>
+    </form> </li>
+    <li class="login"> Hello {{user.username}}<div class="ellipse"></div>
+     
+    </li>
+    {% endif %}
+    </li>
+  </ul>
+
+  <main>
+    <div class="container text-center ">
+      <div class="row content">
+        <h1>My deliveries</h1>
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th>Delivery name</th>
+              <th>Delivery Area</th>
+              <th>Delivery Status</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for d in deliveries%}
+            <tr id="{{d.id}}" class="{{d.delType}}">
+              <td><span class="type"></span>
+                <p>{{d.title}} </p>
+              </td>
+              <td>
+                {%if d.area == "GD"%}<p>Gush dan</p>{% endif %}
+                {%if d.area == "RH"%}<p>Ramat hagolan</p>{% endif %}
+                {%if d.area == "HS"%}<p>Hashfela</p>{% endif %}
+                {%if d.area == "DR"%}<p>Darom</p>{% endif %}
+                {%if d.area == "GL"%}<p>Galil</p>{% endif %}
+              </td>
+              <td>
+                <p>{% if d.status == 0 %}Wating for pick-up{% endif %}
+                  {% if d.status == 1 %}Delivery has been collected{% endif %}
+                  {% if d.status == 2 %}Delivery is on it's way{% endif %}
+                  {% if d.status == 3 %}Delivery has been arrived{% endif %}
+                  <br><a href="{{d.id}}" class="deliveryTrack"><span>Delivery
+                      tracking</span></a></p>
+              </td>
+              
+              <td>
+                {% if  d.deliveryman is None %}
+                <form action="{% url 'deleteDelivery' d.id %}" method="post">
+                  {% csrf_token %}
+                  {{form.as_p}}
+                  <button type="sumbit" class="btn btn-danger">delete</button>
+                </form>
+                {% endif %}
+              </td>
+              
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </main>
+  {% load static %}
+  <script src="{% static 'script2.js' %}"async></script>
+</body>
+
+</html>

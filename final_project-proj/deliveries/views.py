@@ -30,13 +30,13 @@ def myDeliveries(request):
 
 @login_required
 def showDelivery(request,delivery_pk):
-    delivery = get_object_or_404(deliveries,pk=delivery_pk)
+    delivery = get_object_or_404(deliveries,pk=delivery_pk,sender=request.user)
     return render(request, 'progress.html',{'d':delivery})
 
 @login_required
 def makeDelivery(request):
-    myDel= deliveries.objects.filter(deliveryman = request.user).order_by('-status')
-    allnewdels= deliveries.objects.filter(status = 0)
+    myDel= deliveries.objects.exclude(sender=request.user).filter(deliveryman = request.user).order_by('-status')
+    allnewdels= deliveries.objects.exclude(sender=request.user).filter(status = 0)
     return render(request,'makeDelivery.html',{'deliveries':myDel , 'newdeliveries':allnewdels})
 
 @login_required

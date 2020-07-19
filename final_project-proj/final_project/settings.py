@@ -25,7 +25,7 @@ SECRET_KEY = '=+fx!37y9*z-%#dxac^@5h0ajib@u6s=hpw!)hg-3b9)1$1t)4'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['justsa.pythonanywhere.com']
 
 
 # Application definition
@@ -119,3 +119,5 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
 STATIC_URL = '/static/'
+
+STATIC_ROOT = '/home/justSa/final_project-proj/deliveries/static'

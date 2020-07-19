@@ -62,7 +62,7 @@ def order(request):
         return render(request,'order.html',{'form':deliveryForm()})
     else:
         try:
-            form = deliveryForm(request.POST) 
+            form = deliveryForm(request.POST)
             newDelivery = form.save(commit=False)
             newDelivery.sender = request.user
             newDelivery.save()
